@@ -1,0 +1,62 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello ParcoursController!
+{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card bg-transparent border rounded-3 h-100">
+
+					<div class="card-header bg-light border-bottom">
+						<h5 class="card-header-title">
+							<h2 style="font-weight: bold">
+								<center>Mentions et Parcours</center>
+							</h2>
+						</div>
+					</h5>
+				</div>
+
+				<div class="card-body">
+					<div class="row">
+
+						{% if parcours is empty %}
+							<div class="col-1"></div>
+							<div class="col-10">
+								<h3>Aucune information appartient au sujet du "Mentions et parcours"</h3>
+								<br><a href="{{ path('app_directeur_new') }}">Créer</a>
+							</div>
+							<div class="col-1"></div>
+
+						{% else %}
+
+							{% for parcour in parcours %}
+								<div class="col-md-6 col-sm-12">
+									<div class="card  card-hover">
+										<div class="card-header bg-info">
+											<h4 class="m-b-0 text-white">{{ parcour.nom}}</h4>
+										</div>
+										<div class="card-body">
+											<h3 class="card-title">{{ parcour.sigle }}</h3>
+											<p class="card-text">{{ parcour.description | raw }}</p>
+											<a href="{{ path('app_parcours_admin_edit', {id: parcour.id}) }}" class="btn btn-primary">Editer</a>
+											<form action="{{ path('app_parcours_delete', {id: parcour.id}) }}" method="POST" style="display: inline-block">
+												<input type="hidden" name="_method" value="DELETE">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ parcour.id) }}">
+												<button class="btn btn-danger">Supprimer</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+							<a href="{{ path('app_directeur_new') }}">Créer</a>
+
+						{% endif %}
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

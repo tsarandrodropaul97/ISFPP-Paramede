@@ -1,0 +1,33 @@
+vich_uploader:
+    db_driver: orm
+    metadata:
+        type: attribute
+
+    mappings:
+        partenaire_image:
+            uri_prefix: /images/partenaires
+            upload_destination: '%kernel.project_dir%/public/images/partenaires'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        
+        actualite_image:
+            uri_prefix: /images/actualites
+            upload_destination: '%kernel.project_dir%/public/images/actualites'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+        etudiant_image:
+            uri_prefix: /images/etudiant
+            upload_destination: '%kernel.project_dir%/public/images/etudiants'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+        professeur_image:
+            uri_prefix: /images/professeur
+            upload_destination: '%kernel.project_dir%/public/images/professeurs'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+
+
+    #mappings:
+    #    products:
+    #        uri_prefix: /images/products
+    #        upload_destination: '%kernel.project_dir%/public/images/products'
+    #        namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

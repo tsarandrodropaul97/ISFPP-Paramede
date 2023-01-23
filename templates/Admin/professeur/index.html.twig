@@ -1,0 +1,62 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Liste des professeurs!
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Professeurs'} ) }}
+
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<table id="zero_config" class="table product-overview" width="100%">
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>Id</td>
+							<td>Photo</td>
+							<td>Nom complet</td>
+							<td>Adresse</td>
+							<td>Téléphone</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						<pre>
+					</pre>
+						{% for professeur in professeurs %}
+							<tr style="text-align: center">
+								<td>{{ professeur.id }}/ISFPP</td>
+								<td>
+									<img src="/images/professeurs/{{ professeur.filename }}" alt="Docteur" class="rounded-circle" width="30px" height="30px" data-toggle="modal" data-target=".bs-example-modal-lg{{ professeur.id }}" style="cursor: pointer"></td>
+								<td>{{ professeur.nom }}
+									{% if professeur.prenoms is null %}
+										{% else %}
+											{{ professeur.prenoms }}
+									{% endif %}
+								</td>
+								<td>{{professeur.adresse}}</td>
+								<td>{{ professeur.tel }}</td>
+								<td>
+									<a href="{{ path('app_professeur_edit_admin', {'id': professeur.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+										Modifier</a>
+									<form action="{{ path('app_professeur_delete_admin', {id: professeur.id}) }}" method="POST" style="display: inline-block">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ professeur.id) }}">
+										<button class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</button>
+									</form>
+								</td>
+							</tr>
+					</tbody>
+
+				</div>
+			{% endfor %}
+		</tbody>
+		<a href="{{ path('app_professeur_creer_admin') }}" alt="default" class="btn btn-secondary" style="float: right">
+			<i class="fas fa-plus"></i>
+			Ajouter un nouveau professeur</a>
+	</table>
+</div></div></div>{% endblock %}

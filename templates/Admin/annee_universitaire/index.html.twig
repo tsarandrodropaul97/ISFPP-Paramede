@@ -1,0 +1,54 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Liste des années universitaires
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Année universitaire'} ) }}
+
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<table id="zero_config" class="table product-overview" width="100%">
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>Id</td>
+							<td>Nom</td>
+							<td>Date de rentrée</td>
+							<td>Date de fin</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						<pre>
+					</pre>
+						{% for anneeUniversitaire in anneeUniversitaires %}
+							<tr style="text-align: center">
+								<td>{{ anneeUniversitaire.id }}</td>
+								<td>{{ anneeUniversitaire.nom }}</td>
+								<td>{{ anneeUniversitaire.dateDeRentree | date('d F Y')  }}</td>
+								<td>{{ anneeUniversitaire.dateDeFin | date('d F Y') }}</td>
+								<td>
+									<a href="{{ path('app_annee_universitaire_edit_admin', {'id': anneeUniversitaire.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+										Modifier</a>
+									{# <form action="{{ path('app_annee_universitaire_delete_admin', {id: anneeUniversitaire.id}) }}" method="POST" style="display: inline-block">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ anneeUniversitaire.id) }}">
+										<button class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</button>
+									</form> #}
+								</td>
+							</tr>
+					</tbody>
+
+				</div>
+			{% endfor %}
+		</tbody>
+		<a href="{{ path('app_annee_universitaire_creer_admin') }}" alt="default" class="btn btn-secondary" style="float: right">
+			<i class="fas fa-plus"></i>
+			Ajouter un nouveau année universitaire</a>
+	</table>
+</div></div></div>{% endblock %}

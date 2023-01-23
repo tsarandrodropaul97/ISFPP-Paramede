@@ -1,0 +1,112 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello PaiementController!
+{% endblock %}
+
+{% block body %}
+	<h1>{{ include("Admin/partials/titre.html.twig", {'titre':'Detaille de paiment'} ) }}
+	</h1><br>
+	{% set jours = {
+	'Lundi': 'Mon',
+	'Mardi': 'Tue',
+	'Mercredi': 'Wed',
+	'Jeudi': 'Thu',
+	'Vendredi': 'Fri',
+	'Samedi': 'Sat',
+	'Dimanche': 'Sun',
+} %}
+	{% set mois = {
+	'janvier': 'January',
+	'Fevrier': 'February',
+	'Mars': 'March',
+	'Avril': 'April',
+	'Mai': 'May',
+	'Juin': 'June',
+	'Juillet': 'July',
+	'Aout': 'August',
+	'Septembre': 'September',
+	'Octobre': 'October',
+	'Novembre': 'November',
+	'Decembre': 'December',
+} %}
+	<div class="card">
+		<div class="card-title"></div>
+
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-4">
+					<p>Nom:
+						<b>{{ nom }}</b>
+					</p>
+					<p>Prenom:
+						<b>{{ prenom }}</b>
+					</p>
+					Matricule:
+					<b>{{ matricule }}</b>
+				</div>
+				<div class="col-md-4"></div>
+				<div class="col-md-4">
+					<img src="/images/etudiants/{{ nomPhoto }}" alt="Docteur" width="60%" height="60%" style="float: right">
+				</div>
+			</div>
+			<hr>
+			<h2>Retard:
+				{% if impayer is empty %}
+					<span style="color: rgb(35, 85, 20); font-size: 30px">Aucune</span>
+				{% else %}
+					{% for ecolage in impayer %}
+						{% set j = ecolage | date('F') %}
+						{% for cle, valeur in mois %}
+							{% set dateMoi = ecolage | date('F') %}
+							{% if valeur == dateMoi %}
+								<span style="color: red; font-size: 20px">{{ cle }}
+									{{ ecolage | date('Y') }},</span>
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+				{% endif %}
+
+			</h2>
+			<hr>
+			<table border="1" width="100%" class="table">
+				<thead style="text-align: center" class="thead-light">
+					<tr>
+						<th>Date paiment</th>
+						<th>Ecolage</th>
+					</tr>
+				</thead>
+				<tbody style="text-align: center">
+					{% for ecolage in ecolagePayerParEtudiant %}
+						<tr>
+							<td>
+								{% for cle, valeur in jours %}
+									{% set j = ecolage.datePaiement | date('D') %}
+									{% set m = ecolage.datePaiement | date('m') %}
+									{% if valeur == j %}
+										{{cle }}
+									{% endif %}
+								{% endfor %}
+								{% for cle, valeur in mois %}
+									{% set dateMoi = ecolage.datePaiement | date('F') %}
+									{% if valeur == dateMoi %}
+										{{ cle }}
+										{{ ecolage.ecolagePayer | date('Y') }}
+									{% endif %}
+								{% endfor %}
+							</td>
+							<td>
+								{% for cle, valeur in mois %}
+									{% set dateMoi = ecolage.ecolagePayer | date('F') %}
+									{% if valeur == dateMoi %}
+										{{ cle }}
+										{{ ecolage.ecolagePayer | date('Y') }}
+									{% endif %}
+								{% endfor %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

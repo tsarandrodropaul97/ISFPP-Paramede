@@ -1,0 +1,166 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello UserController!
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Parametre'} ) }}
+	<br>
+	<style>
+		.disable {
+			cursor: default;
+			pointer-events: none;
+			text-decoration: none;
+			background: rgb(206, 72, 72)
+		}
+	</style>
+	
+	<div class="row">
+		<div class="col-sm-12 col-md-6 col-lg-4">
+			<div class="card">
+				<div class="card-body">
+					<h3 class="card-title">
+						<center>INSCRIPTION</center>
+					</h3>
+					<h6 class="card-subtitle" style="color:black">
+						<center>
+						{% for date in dateInscription %}
+							{{ date.dateDebut | date('d F Y') }} au {{ date.dateFin | date('d F Y') }}
+						{% endfor %}</center><BR><br><br><br><br><br>
+				</div>
+				<button class="btn btn-secondary text-white" data-toggle="modal" data-target=".bs-example-modal-sm">
+					<i class="fas fa-plus"></i>
+					Ajouter</button>
+			</div>
+		</div>
+
+		<div class="col-sm-12 col-md-6 col-lg-4">
+			<div class="card">
+				<div class="card-body">
+					<h3 class="card-title">
+						<center>NIVEAU</center>
+					</h3>
+					<h6 class="card-subtitle" style="color:black">
+						<center>
+						Niveau : L1, L2, L3 (SAGE FEMME ET INFIRMIERE)</center><br><br><br><br>
+				</div>
+				<a class="btn btn-secondary text-white" data-toggle="modal" data-target=".bs-example-modal-smn">
+					<i class="fas fa-plus"></i>
+					Ajouter</a>
+			</div>
+		</div>
+
+		<div class="col-sm-12 col-md-6 col-lg-4">
+			<div class="card">
+				<div class="card-body">
+					<h3 class="card-title">
+						<center>DROIT</center>
+					</h3>
+					<table width="100%">
+					{% for frais in fraisParNiveau %}
+					<tr style="padding: 20px; color:black">
+						<td>{{ frais.niveau.nom }}:</td>
+						<td>{{ frais.ecolage }}</td>
+					</tr>
+					{% endfor %}
+					</table>
+					
+				</div>
+				<button class="btn btn-secondary text-white" data-toggle="modal" data-target=".bs-example-modal-smd" {% if niveauD is empty %}disabled{% endif %}
+				 >
+					<i class="fas fa-plus"></i>
+					Ajouter</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-4">
+			<div class="card">
+				<div class="card-title" style="background-color: rgb(74, 110, 160); color: white"><center><h3>LISTE DES INSCRIPTIONS</h3></center></div>
+				<div class="card-body">
+					<center>
+						<ul>
+							{% for date in listeDateInscription %}
+							<li style="list-style-type: none;">{{ date.dateDebut | date('d F Y') }} au {{ date.dateFin | date('d F Y') }}</li>
+							{% endfor %}
+						</ul>
+					</center>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="mySmallModalLabel">INSCRIPTION</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					{{form_start(formInscrption)}}
+					{{form_row(formInscrption.dateDebut)}}
+					{{form_row(formInscrption.dateFin)}}
+					<br>
+					<button class="btn btn-secondary" style="float: left">
+						<i class="fas fa-plus"></i>
+						Ajouter</button>
+					<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" style="float: right">
+						<i class="fa fa-times"></i>
+						Fermer</button>
+					{{form_end(formInscrption)}}
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade bs-example-modal-smn" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="mySmallModalLabel">NIVEAU</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					{{form_start(formNiveau) }}
+					{{form_row(formNiveau.nom)}}
+					<br>
+					<button class="btn btn-secondary" style="float: left">
+						<i class="fas fa-plus"></i>
+						Ajouter</button>
+					<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" style="float: right">
+						<i class="fa fa-times"></i>
+						Fermer</button>
+					{{form_end(formNiveau)}}
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade bs-example-modal-smd" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="mySmallModalLabel">FRAIS</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				<div class="modal-body">
+					{{form_start(formFrais) }}
+					{{form_row(formFrais.niveau)}}
+					{{form_row(formFrais.droit)}}
+					{{form_row(formFrais.ecolage)}}
+
+					<br>
+					<button class="btn btn-secondary" style="float: left">
+						<i class="fas fa-plus"></i>
+						Ajouter</button>
+					<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true" style="float: right" >
+						<i class="fa fa-times"></i>
+						Fermer</button>
+					{{form_end(formFrais)}}				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

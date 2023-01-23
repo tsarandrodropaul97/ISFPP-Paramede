@@ -1,0 +1,54 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Liste des Semestre!
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Semestre'} ) }}
+
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<table id="zero_config" class="table product-overview" width="100%">
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>Id</td>
+							<td>Nom</td>
+							<td>Niveau</td>
+							<td>Type</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						<pre>
+					</pre>
+						{% for semestre in semestres %}
+							<tr style="text-align: center">
+								<td>{{ semestre.id }}</td>
+								<td>{{ semestre.nom }}</td>
+								<td>{{ semestre.niveau }}</td>
+								<td>{{ semestre.type }}</td>
+								<td>
+									<a href="{{ path('app_semestre_edit_admin', {'id': semestre.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+										Modifier</a>
+									<form action="{{ path('app_semestre_delete_admin', {id: semestre.id}) }}" method="POST" style="display: inline-block">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ semestre.id) }}">
+										<button class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</button>
+									</form>
+								</td>
+							</tr>
+					</tbody>
+
+				</div>
+			{% endfor %}
+		</tbody>
+		<a href="{{ path('app_semestre_creer_admin') }}" alt="default" class="btn btn-secondary" style="float: right">
+			<i class="fas fa-plus"></i>
+			Ajouter un nouveau semestre</a>
+	</table>
+</div></div></div>{% endblock %}

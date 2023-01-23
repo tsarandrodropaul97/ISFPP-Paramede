@@ -1,0 +1,249 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello EtudiantController!
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Etudiants'} ) }}
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<center>
+					<h4 class="card-tille" style="font-size:30px; font-weight: bold;">{{ niveau }}</h4>
+					<i>Effectifs: {{ nbrEtudiant}}</i>
+				</center>
+				<table id="zero_config" class="table product-overview" width="100%">
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>Matricule</td>
+							<td>Photo</td>
+							<td>Nom complet
+							</td>
+							<td>Dossier</td>
+							<td>Situation Matrimoniale</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						<pre>
+					</pre>
+						{% for etudiant in etudiants %}
+							<tr style="text-align: center">
+								<td>{{ etudiant.matricule }}/ISFPP</td>
+								<td>
+									{% if etudiant.filename is null %}
+										<img src="{{asset('assets/images/etudiant.png')}}" alt="Docteur" class="rounded-circle" width="30px" height="30px" data-toggle="modal" data-target=".bs-example-modal-lg{{ etudiant.id }}" style="cursor: pointer">
+									{% else %}
+										<img src="/images/etudiants/{{ etudiant.filename }}" alt="Docteur" class="rounded-circle" width="30px" height="30px" data-toggle="modal" data-target=".bs-example-modal-lg{{ etudiant.id }}" style="cursor: pointer"></td>
+								{% endif %}
+								<td>{{ etudiant.nom }}
+									{% if etudiant.prenom is null %}
+										{% else %}
+											{{ etudiant.prenom }}
+									{% endif %}
+								</td>
+								<td>
+									{% set valeurBool = [] %}
+									{% set valeurBool = valeurBool|merge([etudiant.releveNoteBacc, etudiant.bNaissance, etudiant.pIdentite]) %}
+									{% if false in valeurBool %}
+										<span class="badge badge-danger" data-toggle="modal" data-target="#myModal{{ etudiant.id }}" style="cursor: pointer">Manquant</span>
+									{% else %}
+										<span class=" badge badge-success">Complete</span>
+									{% endif %}
+								</td>
+								<td>{{ etudiant.situationMatrimoniale }}</td>
+								<td>
+									<a href="{{ path('app_etudiant_edit_admin', {'id': etudiant.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+										Modifier</a>
+									<form action="{{ path('app_etudiant_delete_admin', {id: etudiant.id}) }}" method="POST" style="display: inline-block">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ etudiant.id) }}">
+										<button class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</button>
+									</form></td>
+							</tr>
+
+						{# Modal information dossier manquant MODAL SMALL #}
+							<div class="modal fade" id="myModal{{ etudiant.id }}">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title" id="myModalLabel">Dossier manquant pour
+												<b>{{ etudiant.nom }}
+													{{ etudiant.prenom }}</b>
+											</h4>
+										</div>
+										<div class="modal-body">
+											<center>
+												<br>
+												{% if etudiant.filename is null %}
+													<img src="{{asset('assets/images/etudiant.png')}}" alt="Docteur" class="rounded-circle" width="40%" height="50%">
+												{% else %}
+													<img src="/images/etudiants/{{ etudiant.filename }}" alt="Docteur" class="rounded-circle" width="40%" height="50%"></td>
+											{% endif %}
+											<h3 class="media-heading"></h3>
+
+
+											{% if etudiant.pIdentite == false %}
+												<span>
+													<strong style="float:left">
+														Photocopie piece d'identité
+													</strong>
+												</span>
+												<span class="label label-danger" style="font-size: 15px">Aucune</span>
+											{% endif %}
+											<hr>
+											{% if etudiant.bNaissance == false %}
+												<span>
+													<strong style="float:left">
+														Photocopie bulettin de naissance
+													</strong>
+												</span>
+												<span class="label label-danger" style="font-size: 15px">Aucune</span>
+											{% endif %}
+											<hr>
+											{% if etudiant.releveNoteBacc == false %}
+												<span>
+													<strong style="float:left">
+														Photocopie rélévé de note
+													</strong>
+												</span>
+												<span class="label label-danger" style="font-size: 15px">Aucune</span>
+											{% endif %}
+											<hr>
+										</center>
+										<hr>
+									</div>
+									<div class="modal-footer">
+										<center>
+											<button type="button" class="btn btn-success" data-dismiss="modal">Fermer</button>
+											{# <button type="button" class="btn btn-success" data-dismiss="modal">Fermer</button> #}
+
+										</center>
+									</div>
+								</div>
+							</div>
+						</div>
+						{# FIN Modal information dossier manquant MODAL SMALL #}
+
+						{# DEBUT Modal information MODAL LG #}
+						<div class="modal fade bs-example-modal-lg{{ etudiant.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title" id="myLargeModalLabel">A propos de {{ etudiant.nom }}</h4>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									</div>
+									<div class="modal-body">
+										<center>
+											{% if etudiant.filename is null %}
+												<img src="{{asset('assets/images/etudiant.png')}}" alt="Docteur" class="rounded-circle" width="15%" height="20%">
+											{% else %}
+												<img src="/images/etudiants/{{ etudiant.filename }}" alt="Docteur" class="rounded-circle" width="15%" height="20%"></td>
+										{% endif %}
+									</center>
+									<br>
+									<div class="row">
+										<div class="col-4">
+											<b>Nom complet:</b>
+											<span>
+												{{ etudiant.nom }}
+												{% if etudiant.prenom is null %}
+													{% else %}
+														{{ etudiant.prenom }}
+												{% endif %}
+											</span><br><br>
+											<b>Date de naissance:</b>
+											<span>
+												{{ etudiant.dateNaissance | date('d F y') }}
+											</span><br><br>
+											<b>Lieu de naissance:</b>
+											<span>
+												{{ etudiant.lieuNaissace }}
+											</span><br><br>
+											<b>Adresse:</b>
+											<span>
+												{{ etudiant.adresse }}
+											</span><br><br>
+											<b>Situation matrimoniale:</b>
+											<span>
+												{{ etudiant.situationMatrimoniale }}
+											</span><br><br>
+											<b>Email</b>
+											<span>
+												{{ etudiant.email }}
+											</span><br><br>
+											<b>CIN:</b>
+											<span>
+												{{ etudiant.cin }}
+											</span><br><br>
+											<b>Delivré le:</b>
+											<span>
+												{{ etudiant.delivre | date('d F y')}}
+											</span><br><br>
+											<b>A:</b>
+											<span>
+												{{ etudiant.fait }}
+											</span><br><br>
+										</div>
+										<div class="col-4" style="background-color: rgb(238, 237, 237); border-radius: 20px">
+											<center>
+												<b>Matricule:</b>
+												<span>
+													{{ etudiant.matricule }}
+												</span><br><br>
+												<b>Niveau</b>
+												<span>
+													{{ etudiant.niveau.nom }}
+												</span><br><br>
+											</center>
+										</div>
+										<div class="col-4">
+											<b>Etablissement d'origine:</b>
+											<span>
+												{{ etudiant.etablissement }}
+											</span><br><br>
+											<b>N° d'inscription Bacc:
+											</b>
+											<span>
+												{{ etudiant.numeroInscriptionBacc }}
+											</span><br><br>
+											<b>Centre d'examen:</b>
+											<span>
+												{{ etudiant.centreBacc }}
+											</span><br><br>
+											<b>Serie :</b>
+											<span>
+												{{ etudiant.serie }}
+											</span><br><br>
+											<b>Mention:</b>
+											<span>
+												{{ etudiant.mention }}
+											</span><br><br>
+											<b>Année du Bacc:</b>
+											<span>
+												{{ etudiant.anneeBacc }}
+											</span><br><br>
+
+
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+							<!-- /.modal-content -->
+						</div>
+						<!-- FIN Modal information MODAL LG-->
+					</tbody>
+				</div>
+			{% endfor %}
+		</tbody>
+		
+	</table>
+</div></div></div>{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Modifier un examen
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Editer un examen'} ) }}
+	<br>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					{{ form_start(form)}}
+					<div class="row">
+						<div class="col-4 bg-bprimary">
+							{{ form_row(form.nom)}}
+						</div>
+						<div class="col-4 bg-bprimary">
+							{{ form_row(form.type)}}
+						</div>
+						<div class="col-4 bg-bprimary">
+							{{ form_row(form.anneeUniversitaire)}}
+						</div>
+					</div><br>
+					<button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Enregistrer</button>
+					{{ form_end(form)}}
+				</div><br>
+			</div>
+		</div>
+	</div>
+{% endblock %}

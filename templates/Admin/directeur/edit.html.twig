@@ -1,0 +1,32 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Edit Directeur
+{% endblock %}
+
+{% block body %}
+	<div class="card">
+		<div class="row g-4">
+			<div class="card bg-transparent border rounded-3 h-100">
+
+				<div class="card-header bg-light border-bottom">
+					<h5 class="card-header-title">
+						<div class="col-12 d-sm-flex justify-content-between align-items-center">
+							<h2 style="float: left; font-weight: bold">Modification d'information du Directeur
+							</h2>
+
+						</div>
+					</h5>
+				</div>
+				<div class="card-body">
+
+					<div class="row g-4">
+						<div class="col-12">
+							{{ include('Admin/directeur/_form.html.twig',{'button_label': 'Enregistrer'}) }}
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

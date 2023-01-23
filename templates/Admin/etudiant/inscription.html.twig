@@ -1,0 +1,130 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello EtudiantController!
+{% endblock %}
+
+{% block body %}
+	<h1>
+		{{ include("Admin/partials/titre.html.twig", {'titre':' Inscription'} ) }}
+	</h1>
+
+	{% set dateNow = 'now' | date('d-m-Y') %}
+
+	{% set mois = {
+	'janvier': 'January',
+	'Fevrier': 'February',
+	'Mars': 'March',
+	'Avril': 'April',
+	'Mai': 'May',
+	'Juin': 'June',
+	'Juillet': 'July',
+	'Aout': 'August',
+	'Septembre': 'September',
+	'Octobre': 'October',
+	'Novembre': 'November',
+	'Decembre': 'December',
+} %}
+
+	<div class="card">
+		<div class="card-body">
+			{% if dateNow < dateFinInscription %}
+				<div class="card-title">
+					<h1>
+						<center style="font-weight: bold">VEUILLEZ REMPLIR TOUS LES CHAMPS</center>
+					</h1>
+				</div>
+				<hr>
+				<h3>
+					<center>
+						<b>ISFPP</b>
+					</center>
+				</h3><hr>
+				{{ form_start(form)}}
+				<div class="row">
+					<div class="col-6">{{ form_row(form.matricule, {'value': matricule ~ ' /ISFPP' }) }}</div>
+					<div class="col-6">{{ form_row(form.niveau) }}</div>
+				</div><br>
+				<hr><h3>
+					<center>
+						<b>Information personnelle</b>
+					</center>
+				</h3><hr>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.nom) }}</div>
+					<div class="col-6">{{ form_row(form.prenom) }}</div>
+				</div>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.dateNaissance) }}</div>
+					<div class="col-6">{{ form_row(form.lieuNaissace) }}</div>
+				</div>
+				<div class="row">
+					<div class="col-4">{{ form_row(form.cin) }}</div>
+					<div class="col-4">{{ form_row(form.delivre) }}</div>
+					<div class="col-4">{{ form_row(form.fait) }}</div>
+				</div>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.adresse) }}</div>
+					<div class="col-6">{{ form_row(form.email) }}</div>
+				</div>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.situationMatrimoniale) }}</div>
+					<div class="col-6">{{ form_row(form.imageFile) }}</div>
+				</div><br>
+				<div class="row">
+					<div class="col-4">
+						<div class="form-check">
+							{{ form_row(form.releveNoteBacc) }}
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="form-check">
+							{{ form_row(form.bNaissance) }}
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="form-check">
+							{{ form_row(form.pIdentite) }}
+						</div>
+					</div>
+				</div><br>
+				<hr>
+				<h3>
+					<center>
+						<b>Bacc Lauréat</b>
+					</center>
+				</h3>
+				<hr>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.numeroInscriptionBacc) }}</div>
+					<div class="col-6">{{ form_row(form.serie) }}</div>
+				</div>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.centreBacc) }}</div>
+					<div class="col-6">{{ form_row(form.anneeBacc) }}</div>
+				</div>
+				<div class="row">
+					<div class="col-6">{{ form_row(form.mention) }}</div>
+					<div class="col-6">{{ form_row(form.etablissement) }}</div>
+				</div><br><br>
+				<button class="btn btn-secondary">
+					<i class="fas fa-plus"></i>
+					S'inscrire</button>
+				{{ form_end(form)}}
+			{% else %}
+				<center>
+					<h1 style="color : red">Vous ne pouvez pas faire une nouvelle inscription
+						<br></h1>
+					<span style="font-size: 20px">La date de fin d'inscription est
+					</h3>
+					{% for cle, valeur in mois %}
+						{% if valeur == dateFinInscription | date('F')  %}
+							{{ dateFinInscription | date('d')}}
+							{{ cle }}
+							{{ dateFinInscription | date('Y')}}
+						{% endif %}
+					{% endfor %}
+				</span>
+			</center>
+		{% endif %}
+	</div>
+</div>{% endblock %}

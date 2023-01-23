@@ -1,0 +1,28 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Edit Partenaires
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Edit Partenaire'} ) }}
+	<br>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					{{ form_start(form)}}
+					<div class="row">
+						<div class="col-12 bg-bprimary">
+							{{ form_row(form.nom)}}
+						</div>
+						<div class="col-12">
+							{{ form_row(form.imageFile)}}
+						</div>
+					</div>
+					<button type="submit" class="btn btn-success">Enregistrer</button>
+					{{ form_end(form)}}
+				</div><br>
+			</div>
+		</div>
+	</div>
+{% endblock %}

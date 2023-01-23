@@ -1,0 +1,92 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Relevé de note
+{% endblock %}
+
+{% block body %}
+{{ include("Admin/partials/titre.html.twig", {'titre':''} ) }}
+<center>
+	<h4 class="card-tille" style="font-size:30px; font-weight: bold;">Rélévé de notes</h4>
+</center>
+
+<div class="row">
+	<div class="col-3"></div>
+	<div class="col-3"></div>
+	<div class="col-3"></div>
+	<div class="col-3"><button class="btn btn-success" onclick="imprimerReleve('releve')">Imprimer la facture</button></div>
+</div>
+
+<div class="col" id="releve">	
+{% for examen in examens %}
+	<h4><b>Nom : </b>{{etudiant.nom}}</h4>
+	<h4><b>Prénoms : </b>{{etudiant.prenom}}</h4>
+	<h4><b>Niveau : </b>{{etudiant.niveau}}</h4>
+	<h4><b>Examen : </b>{{examen.nom}}</h4><br><br>
+		{% set examenNote = null %}
+		{% for semestre in semestres %}
+			<h4><b>{{ semestre.nom }}</b></h4>
+			<div class="card-body">
+				<div class="d-flex no-block align-items-center m-b-30"></div>
+				<div class="table-responsive">
+					<table id="" class="table product-overview table-bordered" width="100%">
+						<thead>
+							<tr style="color:black ;font-weight:bold; text-align:center">
+								<td>Unité d'enseignement</td>
+								<td>Note</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% set totaleNote = 0 %}
+							{% set credit = 0 %}
+							{% for uniteEnseignement in semestre.uniteEnseignements %}
+								<tr style="text-align: center">
+										{% for note in notes %}
+											{% set examenNote = note.examen %}
+												{% if examenNote is same as (examen) %}
+													{% if note.uniteEnseignement is same as(uniteEnseignement) %}
+														{% if note.resultat.semestre is same as (semestre) %}
+															<td>{{note.uniteEnseignement.nom}}</td>
+															<td>{{ note.valeur }}</td>
+															{% set totaleNote = totaleNote + note.valeur %}
+															{% set credit = credit + 1 %}
+														{% endif %}
+													{% endif %}
+												{% endif %}
+										{% endfor %}
+								</tr>
+							{% endfor %}
+								<tr>
+									<td style="text-align: right">
+										<b>Totale</b>								
+									</td>
+									<td style="text-align: center">
+										<b>{{ totaleNote }}</b>
+									</td>
+								</tr>
+								<tr>
+									{% if credit != 0 %}
+										<td style="text-align: right"><b>Moyenne</b></td>
+										{% set moyenne = totaleNote / credit %}
+										{% if moyenne >= norme.moyenneAdmis %}
+										{% else %}
+										{% endif %}
+										<td style="text-align: center;"><b>{{ moyenne | number_format(2)}}</b></td>								
+									{% endif %}
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+	{% endfor %}
+	{% endfor %}
+</div>
+<script type="text/javascript">
+	function imprimerReleve(element) {
+		var printContents = document.getElementById(element).innerHTML;
+		var originalContents = document.body.innerHTML;
+		document.body.innerHTML = printContents;
+		window.print();
+		document.body.innerHTML = originalContents;
+	  }
+</script>
+{% endblock %}

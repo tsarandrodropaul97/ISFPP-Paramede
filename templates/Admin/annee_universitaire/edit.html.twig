@@ -1,0 +1,27 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello ProfesseurController!{% endblock %}
+
+{% block body %}
+
+<h1>
+    {{ include("Admin/partials/titre.html.twig", {'titre':' Ajout semestre'} ) }}
+</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+        </div>
+        {{ form_start(form)}}
+        <div class="col">
+            <div class="row">{{ form_row(form.nom) }}</div>
+            <div class="row">{{ form_row(form.dateDeRentree) }}</div><br>
+            <div class="row">{{ form_row(form.dateDeFin) }}</div>
+        </div><br>
+        <button class="btn btn-secondary">
+            <i class="fas fa-plus"></i>
+            Enregistrer</button>
+        {{ form_end(form)}}
+    </div>
+</div>
+{% endblock %}

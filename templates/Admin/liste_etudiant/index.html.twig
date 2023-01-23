@@ -1,0 +1,77 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %} Liste des étudiants {% endblock %}
+
+{% block body %}
+	<h1>
+		{{ include("Admin/partials/titre.html.twig", {'titre':'Liste des étudiants'} ) }}
+	</h1>
+	<br>
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<center>
+					<h4 class="card-tille" style="font-size:30px; font-weight: bold;">Liste admission des étudiants après examen</h4>
+				</center>
+				<table id="zero_config" class="table product-overview" width="100%">
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>Nom</td>
+							<td>Code</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+                        {% for listeEtudiant in listeDesEtudiants %}
+							<tr style="text-align: center">
+								<td>{{ listeEtudiant.nom }}</td>
+								<td>{{ listeEtudiant.code }}</td>
+								<td>
+                                    <a href="{{ path('app_liste_etudiant_edit', {'id': listeEtudiant.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+										edit</a>
+									<form action="{{ path('app_liste_etudiant_delete', {id: listeEtudiant.id}) }}" method="POST" style="display: inline-block">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ listeEtudiant.id) }}">
+										<button class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</button>
+									</form>
+								</td>
+							</tr>
+                        {% endfor %}
+					</tbody>
+					<a href="#" alt="default" data-toggle="modal" data-target="#myModal" class="btn btn-secondary" style="float: right">
+						<i class="fas fa-plus"></i>
+						Ajouter une nouvelle liste</a>
+				</table>
+			</div>
+		</div>
+	</div>
+    <!-- Modal ajouter liste -->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Ajout UE</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				</div>
+				{{ form_start(form)}}
+				<div class="modal-body">
+					{{form_row(form.nom)}}
+					{{form_row(form.code)}}
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success">Ajouter</button>
+					<button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+
+				</div>
+				{{ form_end(form)}}
+			</div>
+		</div>
+	</div>
+	<!-- Fin du Modal ajouter liste -->
+
+    
+{% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		{% block stylesheets %}
+			<link href="{{asset('../../dist/css/style.css')}}" rel="stylesheet">
+			<link href="{{asset('../../assets/libs/jquery-steps/jquery.steps.css')}}" rel="stylesheet">
+			<link href="{{asset('../../assets/libs/jquery-steps/steps.css')}}" rel="stylesheet">
+		{% endblock %}
+	</head>
+	<body>
+		{% include "Admin/partials/menu.html.twig" %}
+		<div class="container-fluid">
+			{% for label, messages in app.flashes %}
+				<div class="alert alert-{{ label }}">
+					{% for message in messages %}
+						<p>{{ message | raw }}</p>
+					{% endfor %}
+				</div>
+			{% endfor %}
+			{% block body %}{% endblock %}
+		</div>
+		<footer class="footer text-center">
+			Developper par SILENY Tsarandro Paul et Rajaomaniry Ismael,
+			<a href="https://web.facebook.com/profile.php?id=100064290484056" target="__blank">DandoRoid Technology</a>.
+		</footer>
+
+		{% block javascripts %}
+
+			<script src="{{asset('../../assets/libs/jquery/dist/jquery.min.js')}}"></script>
+			<!-- Bootstrap tether Core JavaScript -->
+			<script src="{{asset('../../assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
+			<script src="{{asset('../../assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+			<!-- apps -->
+			<script src="{{asset('../../dist/js/app.min.js')}}"></script>
+			<script src="{{asset('../../dist/js/app.init.js')}}"></script>
+			<script src="{{asset('../../dist/js/app-style-switcher.js')}}"></script>
+			<!-- slimscrollbar scrollbar JavaScript -->
+			<script src="{{asset('../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
+			<script src="{{asset('../../assets/extra-libs/sparkline/sparkline.js')}}"></script>
+			<!--Wave Effects -->
+			<script src="{{asset('../../dist/js/waves.js')}}"></script>
+			<!--Menu sidebar -->
+			<script src="{{asset('../../dist/js/sidebarmenu.js')}}"></script>
+			<script src="{{asset('../../dist/js/custom.min.js')}}"></script>
+			<script src="{{asset('../../assets/libs/chartist/dist/chartist.min.js')}}"></script>
+			<script src="{{asset('../../assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js')}}"></script>
+			<!--c3 charts -->
+			<script src="{{asset('../../assets/extra-libs/c3/d3.min.js')}}"></script>
+			<script src="{{asset('../../assets/extra-libs/c3/c3.min.js')}}"></script>
+			<script src="{{asset('../../assets/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js')}}"></script>
+			<script src="{{asset('../../assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js')}}"></script>
+			<script src="{{asset('../../dist/js/pages/dashboards/dashboard1.js')}}"></script>
+			<script src="{{asset('../../assets/extra-libs/DataTables/datatables.min.js')}}"></script>
+			<script src="{{asset('../../dist/js/pages/datatable/datatable-basic.init.js')}}"></script>
+			<script src="{{asset('../../assets/libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
+			<script src="{{asset('../../assets/libs/jquery-validation/dist/jquery.validate.min.js')}}"></script>
+			<script src="{{asset('../../assets/js/monscript.js')}}"></script>
+			<script src="{{asset('../../assets/libs/echarts/dist/echarts-en.min.js')}}"></script>
+			<script src="{{asset('../../dist/js/pages/echarts/bar/bar.js')}}"></script>
+		{% endblock %}
+	</body>
+</html>

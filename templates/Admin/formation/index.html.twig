@@ -1,0 +1,30 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Formation index
+{% endblock %}
+
+{% block body %}
+	<div class="card">
+		<div class="row">
+			<div class="col-12">
+				<div class="card bg-transparent border rounded-3 h-100">
+					<div class="card-header bg-light border-bottom">
+						<h5 class="card-header-title">
+							<h2 style="float: left; font-weight: bold">Formation</h2>
+							{% if formation is empty %}
+								<a href="{{ path('app_formation_admin_creer') }}" class="btn btn-sm btn-primary mb-0" style="float: right">
+									<i class="fas fa-plus"></i>
+									Ajouter</a>
+							{% else %}
+								<a href="{{ path('app_formation_admin_edit', {id: formation.id})}}" class="btn btn-sm btn-primary mb-0" style="float: right">Modifier</a>
+							{% endif %}
+						</h5>
+					</div>
+					<div class="card-body">
+						{{ formation.description | raw }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

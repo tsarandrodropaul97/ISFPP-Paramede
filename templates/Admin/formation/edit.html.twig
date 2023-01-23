@@ -1,0 +1,26 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Edit Formation
+{% endblock %}
+
+{% block body %}
+	<div class="card">
+		<div class="row">
+			<div class="col-12">
+				<div class="card bg-transparent border rounded-3 h-100">
+					<div class="card-header bg-light border-bottom">
+						<h5 class="card-header-title">
+							<h2 style="float: left; font-weight: bold">Modification d'information pour le sujet "Formation"
+							</h2>
+						</h5>
+					</div>
+					<div class="card-body">
+						{{ include('Admin/components/_form.html.twig', {'button': 'Enregistrer'}) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello PaiementController!
+{% endblock %}
+
+{% block body %}
+	<h1>{{ include("Admin/partials/titre.html.twig", {'titre':'Ecolage'} ) }}
+	</h1>
+{% set mois = {
+	'janvier': 'January',
+	'Fevrier': 'February',
+	'Mars': 'March',
+	'Avril': 'April',
+	'Mai': 'May',
+	'Juin': 'June',
+	'Juillet': 'July',
+	'Aout': 'August',
+	'Septembre': 'September',
+	'Octobre': 'October',
+	'Novembre': 'November',
+	'Decembre': 'December',
+} %}
+
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<center>
+					<h4 class="card-tille" style="font-size:30px; font-weight: bold;">{{ niveau }}</h4>
+				</center>
+				<table id="zero_config" class="table product-overview" width="100%">
+					<div
+						class="row m-t-40">
+						<!-- Column -->
+						<div class="col-md-6 col-lg-3 col-xlg-3">
+							<div class="card card-hover">
+								<div class="box bg-success text-center">
+									<h1 class="font-light text-white">{{ paimentAvance }}</h1>
+									<h6 class="text-white">Avancé</h6>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+						<div class="col-md-6 col-lg-3 col-xlg-3">
+							<div class="card card-hover">
+								<div class="box bg-info text-center">
+									<h1 class="font-light text-white">{{ paiementNormale }}</h1>
+									<h6 class="text-white">Normale</h6>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+						<div class="col-md-6 col-lg-3 col-xlg-3">
+							<div class="card card-hover">
+								<div class="box bg-danger text-center">
+									<h1 class="font-light text-white">{{ paimentRetard }}</h1>
+									<h6 class="text-white">Retard 1 mois</h6>
+								</div>
+							</div>
+						</div>
+						<!-- Column -->
+						<div class="col-md-6 col-lg-3 col-xlg-3">
+							<div class="card card-hover">
+								<div class="box bg-danger text-center">
+									<h1 class="font-light text-white">{{paimentRetardTrop}}</h1>
+									<h6 class="text-white">Retard +1 mois</h6>
+								</div>
+							</div>
+						</div>
+						<thead>
+							<tr style="color:black ;font-weight:bold; text-align:center">
+								<td>Matricule</td>
+								<td>Nom complet</td>
+								<td>Dernier Paiement</td>
+								<td>Action</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for paiement in etudiants %}
+								<tr style="text-align: center">
+									<td>{{ paiement.matricule }}</td>
+									<td>{{ paiement.nomEtudiant }}
+										{% if paiement.prenomEtudiant %}
+										{{paiement.prenomEtudiant}}
+										{% endif %}
+									</td>
+									<td style="font-weight: bold; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+										{% for cle, valeur in mois %}
+											{% if valeur == paiement.dernierPaiment | date('F')  %}
+												{{ cle }}
+											{% endif %}
+										{% endfor %}
+									</td>
+									<td>
+										<a href="{{ path('app_paiement_voir_admin',{idEtudiant: paiement.idEtudiant})}}" class="btn btn-primary" data-toggle="modal" data-target="#myModalModifier{{ paiement.idEtudiant}}"><i class="fas fa-edit"></i> Annuler</a>
+										<a href="{{ path('app_paiement_voir_admin',{idEtudiant: paiement.idEtudiant})}}" class="btn btn-secondary"><i class="fas fa-eye"></i> Voir</a>
+										<a href="#" data-toggle="modal" data-target="#myModal{{ paiement.idEtudiant}}" class="btn btn-success"> <i class="fas fa-edit"></i>Regler</a>
+									</td>
+								</tr>
+								<!-- Modal ajouter ajouter -->
+								<div id="myModal{{ paiement.idEtudiant}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title" id="myModalLabel">Paiement d'Ecolage</h4>
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											</div>
+												<form action="{{ path('app_paiement_frais') }}" method="post">
+											<div class="modal-body">
+												<div class="container" style="background-color: rgb(6, 25, 80); color: white; border-radius: 5px">
+													<h2>Ecolage suivant: <span style="color: rgb(103, 255, 65)">
+													{% set moiSuivant = paiement.dernierPaiment|date_modify("+1 month") | date('F') %}
+													{% for cle, valeur in mois %}
+														{% if valeur == moiSuivant  %}
+															{{ cle }}
+														{% endif %}
+													{% endfor %}
+													</span>
+													</h2>
+												</div>
+													<input type="hidden" name="etudiant" value="{{ paiement.idEtudiant }}">
+													<input type="hidden" name="frais" value="{{ paiement.idFrais }}">
+													<input type="hidden" name="niveau" value="{{ paiement.idNiveau}}">
+													<label for="">Année</label>
+													<select name="annee" id="" class="form-control">
+														<option value="{{ annee }}">
+															{{ annee }}</option>
+
+														<option value="{{ anneeProchaine }}">{{ anneeProchaine }}</option>
+													</select><br>
+													<label for="">mois</label>
+													<select name="dateMois" id="cars" class="form-control">
+s														<option value="01">Janvier</option>
+														<option value="02">Fevrier</option>
+														<option value="03">Mars</option>
+														<option value="04">Avril</option>
+														<option value="05">Mai</option>
+														<option value="06">Juin</option>
+														<option value="07">Juillet</option>
+														<option value="08">Aout</option>
+														<option value="09">Septembre</option>
+														<option value="10">Octobre</option>
+														<option value="11">Novembre</option>
+														<option value="12">Decembre</option>
+													</select>
+											</div>
+											<div class="modal-footer">
+												<button type="submit" class="btn btn-secondary"> <i class="fas fa-plus"></i> Payer</button>
+												<button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+											</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<!-- Fin du Modal ajouter  -->
+
+								<!-- Modal Modifier -->
+								<div id="myModalModifier{{ paiement.idEtudiant}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title" id="myModalLabel">Modification d'Ecolage</h4>
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											</div>
+											<div class="modal-body">
+												<div class="container" style="background-color: rgb(6, 25, 80); color: white; border-radius: 5px">
+													<h2>Dernier paiement: <span style="color: rgb(103, 255, 65)">
+													{% set moiSuivant = paiement.dernierPaiment | date('F') %}
+													{% for cle, valeur in mois %}
+														{% if valeur == moiSuivant  %}
+															{{ cle }}
+														{% endif %}
+													{% endfor %}
+													</span>
+													</h2>
+												</div>												
+											</div>
+											<div class="modal-footer">
+												<form action="{{ path('app_paiement_annuler_admin', {idEtudiant: paiement.idEtudiant}) }}" method="POST" style="display: inline-block">
+													<input type="hidden" name="dernierPaimenet" value="{{ paiement.dernierPaiment}}">
+													<button class="btn btn-danger">
+														<i class="fas fa-trash"></i>
+														Annuler</button>
+												</form>
+												<button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Fermer</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- Fin du Modal Modifier -->
+							{% endfor %}
+						</tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

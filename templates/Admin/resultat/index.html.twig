@@ -1,0 +1,471 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Liste des Resultats!
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Liste des résultats'} ) }}
+	<div style="align-items: right;">
+		<a href="{{path('app_resultat_liste_admis_admin', {'idNiveau' : idNiveau})}}" class="btn btn-primary">
+			<i class="fas fa-info"></i>
+			Afficher la liste des étudiants admis au niveau supérieur</a>
+		<a href="{{path('app_resultat_note_DS_admin', {'idNiveau' : idNiveau})}}" class="btn btn-primary">
+			<i class="fas fa-info"></i>
+			Afficher les résultat de l'examen PS avec note</a>
+		<a href="{{path('app_resultat_liste_PS_admin', {'idNiveau' : idNiveau})}}" class="btn btn-success">
+			<i class="fas fa-info"></i>
+			Afficher la liste des étudiants admis à l'examen PS</a>
+		<a href="{{path('app_resultat_liste_candidats_DS_admin', {'idNiveau' : idNiveau})}}" class="btn btn-warning">
+			<i class="fas fa-info"></i>
+			Afficher la liste des étudiants passent l'examen DS</a>
+		<a href="{{path('app_resultat_liste_DS_admin', {'idNiveau' : idNiveau})}}" class="btn btn-secondary">
+			<i class="fas fa-info"></i>
+			Afficher la liste des étudiants admis en DS</a>
+		<a href="{{path('app_resultat_liste_non_admis_admin', {'idNiveau' : idNiveau})}}" class="btn btn-danger">
+			<i class="fas fa-info"></i>
+			Afficher la liste des étudiants autorisés à rédoubler</a>
+	</div><br>
+	{% if auNull %}
+		<br><br>
+		<div class="card">
+			<div class="card-body">
+				<center>
+					<h1 style="color:red">L'année universitaire n'est pas encore définie</h1>
+				</center>
+			</div>
+		</div>
+	{% endif %}
+	{% for examen in examens %}
+		{% if examen.type is same as('Deuxième session') %}
+			{% if afficherExamenDS %}
+				<h4>
+					<b>{{examen.nom}}</b>
+				</h4>
+				<center>
+					<h4 class="card-tille" style="font-size:30px; font-weight: bold;">{{ niveau }}</h4>
+				</center>
+				<div class="card p-3">
+					{% for semestre in semestres %}
+						<h4>
+							<b>{{ semestre.nom }}</b>
+						</h4>
+						{% if afficherLeBoutonAjouter %}
+							<a href="{{path('app_resultat_creer_admin', {'idNiveau' : idNiveau, 'idSemestre': semestre.id, 'idExamen': examen.id})}}" class="btn btn-primary">
+								<i class="fas fa-plus"></i>
+								Ajouter des notes</a>
+						{% endif %}
+						<div class="card-body">
+							<div class="d-flex no-block align-items-center m-b-30"></div>
+							<div class="table-responsive">
+								<table id="zero_config" class="table product-overview table-bordered" width="100%">
+									<thead>
+										<tr style="color:black ;font-weight:bold; text-align:center">
+											<td>Etudiants</td>
+											{# Les UEs du niveau sur l'entête du tableau #}
+											{% for uniteEnseignement in semestre.uniteEnseignements %}
+												<td>{{uniteEnseignement}}</td>
+											{% endfor %}
+											{# ############################# #}
+											<td>Moyenne</td>
+											<td>Verdicte</td>
+										</tr>
+									</thead>
+									<tbody>
+										{% for etudiant in etudiants %}
+											{% set textColorMoyenne = "" %}
+											{% if examen.type is same as("Deuxième session") %}
+												{% if etudiant.listeDesEtudiants != listeEtudiantsAdmisPS %}
+													<tr style="text-align: center">
+														<td>{{etudiant}}</td>
+														{# Récuperer les notes du semestre #}
+														{% set notes = [] %}
+														{% for examenNotes in examen.notes %}
+															{% if examenNotes.etudiant is same as(etudiant) %}
+																{% if semestre is same as(examenNotes.resultat.semestre) %}
+																	{% set notes = notes | merge([examenNotes]) %}
+																{% endif %}
+															{% endif %}
+														{% endfor %}
+
+														{# Pour chaque colonne d'UE #}
+														{% for uniteEnseignement in semestre.uniteEnseignements %}
+															{# Définir s'il existe des notes pour l'UE #}
+															{% set noteExiste = false %}
+															{% for note in notes %}
+																{% if note.uniteEnseignement is same as(uniteEnseignement) %}
+																	{% set noteExiste = true %}
+																{% endif %}
+															{% endfor %}
+															{# ############################# #}
+															{# S'il existe des notes pour cet UE #}
+															{% if noteExiste %}
+																{% for note in notes %}
+																	{% if uniteEnseignement is same as(note.uniteEnseignement) %}
+																		{% if note.valeur < 10 %}
+																			{% set textColor ="red" %}
+																		{% else %}
+																			{% set textColor ="black" %}
+																		{% endif %}
+																		<td style="color : {{ textColor }}">{{note.valeur}}</td>
+																		{# Afficher la note #}
+																	{% endif %}
+																{% endfor %}
+															{% else %}
+																<td style="color: red;">aucune</td>
+																{# Si non, afficher 'n/a' #}
+															{% endif %}
+														{% endfor %}
+
+														{% set totalNotes = 0 %}
+														{% set moyenne = 0 %}
+														{% set credit = semestre.uniteEnseignements | length %}
+
+														{% if credit is same as(notes | length) %}
+															{% for note in notes %}
+																{% set totalNotes = totalNotes + note.valeur %}
+															{% endfor %}
+															{% set moyenne = totalNotes / credit %}
+															{% if moyenne >= 10 %}
+																{% set textColorMoyenne = "black" %}
+																{% set verdict = "Admis" %}
+																{% set className = "success" %}
+															{% else %}
+																{% set textColorMoyenne = "red" %}
+																{% set verdict = "Non admis" %}
+																{% set className = "danger" %}
+															{% endif %}
+														{% else %}
+															{% set className = " disabled" %}
+															{% set verdict = "Non disponible" %}
+															{% set moyenne = "Non disponible" %}
+														{% endif %}
+														<td style="color : {{ textColorMoyenne }}; font-weight: bold">
+															{{ moyenne | number_format(2) }}
+														</td>
+														<td>
+															<a href="{{ path('app_resultat_afficher_admin', {'idEtudiant': etudiant.id}) }}" class='btn btn-{{className}}'>{{ verdict }}</a>
+														</td>
+													</tr>
+												{% endif %}
+											{% else %}
+												<tr style="text-align: center">
+													<td>{{etudiant}}</td>
+													{# Récuperer les notes du semestre #}
+													{% set notes = [] %}
+													{% for examenNotes in examen.notes %}
+														{% if examenNotes.etudiant is same as(etudiant) %}
+															{% if semestre is same as(examenNotes.resultat.semestre) %}
+																{% set notes = notes | merge([examenNotes]) %}
+															{% endif %}
+														{% endif %}
+													{% endfor %}
+
+													{# Pour chaque colonne d'UE #}
+													{% for uniteEnseignement in semestre.uniteEnseignements %}
+														{# Définir s'il existe des notes pour l'UE #}
+														{% set noteExiste = false %}
+														{% for note in notes %}
+															{% if note.uniteEnseignement is same as(uniteEnseignement) %}
+																{% set noteExiste = true %}
+															{% endif %}
+														{% endfor %}
+														{# ############################# #}
+														{# S'il existe des notes pour cet UE #}
+														{% if noteExiste %}
+															{% for note in notes %}
+																{% if uniteEnseignement is same as(note.uniteEnseignement) %}
+																	{% if note.valeur < 10 %}
+																		{% set textColor="red" %}
+																	{% else %}
+																		{% set
+														textColor="black" %}
+																	{% endif %}
+																	<td style="color : {{ textColor }}">
+																		{{note.valeur}}</td>
+																	{# Afficher la note #}
+																{% endif %}
+															{% endfor %}
+														{% else %}
+															<td style="color: red;">aucune</td>
+															{# Si non, afficher 'n/a' #}
+														{% endif %}
+													{% endfor %}
+
+													{% set totalNotes = 0 %}
+													{% set moyenne = 0 %}
+													{% set credit = semestre.uniteEnseignements | length %}
+
+													{% if credit is same as(notes | length) %}
+														{% for note in notes %}
+															{% set totalNotes = totalNotes + note.valeur %}
+														{% endfor %}
+														{% set moyenne = totalNotes / credit %}
+														{% if moyenne >= 10 %}
+															{% set textColorMoyenne = "black" %}
+															{% set verdict = "Admis" %}
+															{% set className = "success" %}
+														{% else %}
+															{% set textColorMoyenne = "red" %}
+															{% set verdict = "Non admis" %}
+															{% set className = "danger" %}
+														{% endif %}
+													{% else %}
+														{% set className = " disabled" %}
+														{% set verdict = "Non disponible" %}
+														{% set moyenne = "Non disponible" %}
+													{% endif %}
+													<td style="color : {{ textColorMoyenne }}; font-weight: bold">
+														{{ moyenne | number_format(2) }}
+													</td>
+													<td>
+														<a href="{{ path('app_resultat_afficher_admin', {'idEtudiant': etudiant.id}) }}" class='btn btn-{{className}}'>{{ verdict }}</a>
+													</td>
+												</tr>
+											{% endif %}
+										{% endfor %}
+										<tr style="text-align: center">
+											{% set resultats = [] %}
+											<td></td>
+											{% for resultatSemestre in semestre.resultats %}
+												{% if resultatSemestre.examen is same as(examen) %}
+													{% set resultats = resultats | merge([resultatSemestre]) %}
+												{% endif %}
+											{% endfor %}
+											{% for uniteEnseignement in semestre.uniteEnseignements %}
+												<td>
+													{% for resultat in resultats %}
+														{% if resultat.uniteEnseignement is same as(uniteEnseignement) %}
+															<a href="{{ path('app_resultat_edit_admin', {'id': resultat.id, 'idNiveau' : idNiveau, 'idSemestre': semestre.id, 'idExamen': examen.id}) }}" class="btn btn-warning">
+																<i class="fas fa-edit"></i>
+																Modifier les
+																																												notes</a>
+															{% else %}
+														{% endif %}
+													{% endfor %}
+												</td>
+											{% endfor %}
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+		{% else %}
+			<h4>
+				<b>{{examen.nom}}</b>
+			</h4>
+			<center>
+				<h4 class="card-tille" style="font-size:30px; font-weight: bold;">{{ niveau }}</h4>
+			</center>
+			<div class="card p-3">
+				{% for semestre in semestres %}
+					<h4>
+						<b>{{ semestre.nom }}</b>
+					</h4>
+					{% if afficherLeBoutonAjouter %}
+						<a href="{{path('app_resultat_creer_admin', {'idNiveau' : idNiveau, 'idSemestre': semestre.id, 'idExamen': examen.id})}}" class="btn btn-primary">
+							<i class="fas fa-plus"></i>
+							Ajouter des notes</a>
+					{% endif %}
+					<div class="card-body">
+						<div class="d-flex no-block align-items-center m-b-30"></div>
+						<div class="table-responsive">
+							<table id="zero_config" class="table product-overview table-bordered" width="100%">
+								<thead>
+									<tr style="color:black ;font-weight:bold; text-align:center">
+										<td>Etudiants</td>
+										{# Les UEs du niveau sur l'entête du tableau #}
+										{% for uniteEnseignement in semestre.uniteEnseignements %}
+											<td>{{uniteEnseignement}}</td>
+										{% endfor %}
+										{# ############################# #}
+										<td>Moyenne</td>
+										<td>Verdicte</td>
+									</tr>
+								</thead>
+								<tbody>
+									{% for etudiant in etudiants %}
+										{% set textColorMoyenne = "" %}
+										{% if examen.type is same as("Deuxième session") %}
+											{% if etudiant.listeDesEtudiants != listeEtudiantsAdmisPS %}
+												<tr style="text-align: center">
+													<td>{{etudiant}}</td>
+													{# Récuperer les notes du semestre #}
+													{% set notes = [] %}
+													{% for examenNotes in examen.notes %}
+														{% if examenNotes.etudiant is same as(etudiant) %}
+															{% if semestre is same as(examenNotes.resultat.semestre) %}
+																{% set notes = notes | merge([examenNotes]) %}
+															{% endif %}
+														{% endif %}
+													{% endfor %}
+
+													{# Pour chaque colonne d'UE #}
+													{% for uniteEnseignement in semestre.uniteEnseignements %}
+														{# Définir s'il existe des notes pour l'UE #}
+														{% set noteExiste = false %}
+														{% for note in notes %}
+															{% if note.uniteEnseignement is same as(uniteEnseignement) %}
+																{% set noteExiste = true %}
+															{% endif %}
+														{% endfor %}
+														{# ############################# #}
+														{# S'il existe des notes pour cet UE #}
+														{% if noteExiste %}
+															{% for note in notes %}
+																{% if uniteEnseignement is same as(note.uniteEnseignement) %}
+																	{% if note.valeur < 10 %}
+																		{% set textColor ="red" %}
+																	{% else %}
+																		{% set textColor ="black" %}
+																	{% endif %}
+																	<td style="color : {{ textColor }}">{{note.valeur}}</td>
+																	{# Afficher la note #}
+																{% endif %}
+															{% endfor %}
+														{% else %}
+															<td style="color: red;">aucune</td>
+															{# Si non, afficher 'n/a' #}
+														{% endif %}
+													{% endfor %}
+
+													{% set totalNotes = 0 %}
+													{% set moyenne = 0 %}
+													{% set credit = semestre.uniteEnseignements | length %}
+
+													{% if credit is same as(notes | length) %}
+														{% for note in notes %}
+															{% set totalNotes = totalNotes + note.valeur %}
+														{% endfor %}
+														{% set moyenne = totalNotes / credit %}
+														{% if moyenne >= 10 %}
+															{% set textColorMoyenne = "black" %}
+															{% set verdict = "Admis" %}
+															{% set className = "success" %}
+														{% else %}
+															{% set textColorMoyenne = "red" %}
+															{% set verdict = "Non admis" %}
+															{% set className = "danger" %}
+														{% endif %}
+													{% else %}
+														{% set className = " disabled" %}
+														{% set verdict = "Non disponible" %}
+														{% set moyenne = "Non disponible" %}
+													{% endif %}
+													<td style="color : {{ textColorMoyenne }}; font-weight: bold">
+														{{ moyenne | number_format(2) }}
+													</td>
+													<td>
+														<a href="{{ path('app_resultat_afficher_admin', {'idEtudiant': etudiant.id}) }}" class='btn btn-{{className}}'>{{ verdict }}</a>
+													</td>
+												</tr>
+											{% endif %}
+										{% else %}
+											<tr style="text-align: center">
+												<td>{{etudiant}}</td>
+												{# Récuperer les notes du semestre #}
+												{% set notes = [] %}
+												{% for examenNotes in examen.notes %}
+													{% if examenNotes.etudiant is same as(etudiant) %}
+														{% if semestre is same as(examenNotes.resultat.semestre) %}
+															{% set notes = notes | merge([examenNotes]) %}
+														{% endif %}
+													{% endif %}
+												{% endfor %}
+
+												{# Pour chaque colonne d'UE #}
+												{% for uniteEnseignement in semestre.uniteEnseignements %}
+													{# Définir s'il existe des notes pour l'UE #}
+													{% set noteExiste = false %}
+													{% for note in notes %}
+														{% if note.uniteEnseignement is same as(uniteEnseignement) %}
+															{% set noteExiste = true %}
+														{% endif %}
+													{% endfor %}
+													{# ############################# #}
+													{# S'il existe des notes pour cet UE #}
+													{% if noteExiste %}
+														{% for note in notes %}
+															{% if uniteEnseignement is same as(note.uniteEnseignement) %}
+																{% if note.valeur < 10 %}
+																	{% set textColor="red" %}
+																{% else %}
+																	{% set
+												textColor="black" %}
+																{% endif %}
+																<td style="color : {{ textColor }}">
+																	{{note.valeur}}</td>
+																{# Afficher la note #}
+															{% endif %}
+														{% endfor %}
+													{% else %}
+														<td style="color: red;">aucune</td>
+														{# Si non, afficher 'n/a' #}
+													{% endif %}
+												{% endfor %}
+
+												{% set totalNotes = 0 %}
+												{% set moyenne = 0 %}
+												{% set credit = semestre.uniteEnseignements | length %}
+
+												{% if credit is same as(notes | length) %}
+													{% for note in notes %}
+														{% set totalNotes = totalNotes + note.valeur %}
+													{% endfor %}
+													{% set moyenne = totalNotes / credit %}
+													{% if moyenne >= 10 %}
+														{% set textColorMoyenne = "black" %}
+														{% set verdict = "Admis" %}
+														{% set className = "success" %}
+													{% else %}
+														{% set textColorMoyenne = "red" %}
+														{% set verdict = "Non admis" %}
+														{% set className = "danger" %}
+													{% endif %}
+												{% else %}
+													{% set className = " disabled" %}
+													{% set verdict = "Non disponible" %}
+													{% set moyenne = "Non disponible" %}
+												{% endif %}
+												<td style="color : {{ textColorMoyenne }}; font-weight: bold">
+													{{ moyenne | number_format(2) }}
+												</td>
+												<td>
+													<a href="{{ path('app_resultat_afficher_admin', {'idEtudiant': etudiant.id}) }}" class='btn btn-{{className}}'>{{ verdict }}</a>
+												</td>
+											</tr>
+										{% endif %}
+									{% endfor %}
+									<tr style="text-align: center">
+										{% set resultats = [] %}
+										<td></td>
+										{% for resultatSemestre in semestre.resultats %}
+											{% if resultatSemestre.examen is same as(examen) %}
+												{% set resultats = resultats | merge([resultatSemestre]) %}
+											{% endif %}
+										{% endfor %}
+										{% for uniteEnseignement in semestre.uniteEnseignements %}
+											<td>
+												{% for resultat in resultats %}
+													{% if resultat.uniteEnseignement is same as(uniteEnseignement) %}
+														<a href="{{ path('app_resultat_edit_admin', {'id': resultat.id, 'idNiveau' : idNiveau, 'idSemestre': semestre.id, 'idExamen': examen.id}) }}" class="btn btn-warning">
+															<i class="fas fa-edit"></i>
+															Modifier les
+																																								notes</a>
+														{% else %}
+													{% endif %}
+												{% endfor %}
+											</td>
+										{% endfor %}
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endblock %}

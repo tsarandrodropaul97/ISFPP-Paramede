@@ -1,0 +1,40 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Parcours
+{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card bg-transparent border rounded-3 h-100">
+
+					<div class="card-header bg-light border-bottom">
+						<h5 class="card-header-title">
+							<h2 style="font-weight: bold">
+								<center>Modification "Metion et parcour"
+								</center>
+							</h2>
+						</div>
+					</h5>
+				</div>
+				<div class="card-body">
+					{{ form_start(form)}}
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							{{ form_row(form.nom)}}
+						</div>
+						<div class="col-md-6 col-sm-12">
+							{{ form_row(form.sigle)}}
+						</div>
+						<div class="col-md-12 col-sm-12">
+							{{ form_row(form.description)}}
+						</div>
+					</div><br>
+					<button type="submit" class="btn btn-success">Ajouter</button>
+					{{ form_end(form)}}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello DashboardController!
+{% endblock %}
+
+{% block body %}
+	{{ include("Admin/partials/titre.html.twig", {'titre':'Tableau de bord'} ) }}
+
+	<div class="card-group">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="d-flex no-block align-items-center">
+							<div>
+								<i class="mdi mdi-emoticon font-20 text-muted"></i>
+								<p class="font-16 m-b-5">Partanaires</p>
+							</div>
+							<div class="ml-auto">
+								<h1 class="font-light text-right">{{ nbrPartenaire }}</h1>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="progress">
+							<div class="progress-bar bg-info" role="progressbar" style="width: 100%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Column -->
+		<!-- Column -->
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="d-flex no-block align-items-center">
+							<div>
+								<i class="fas fa-users font-20  text-muted"></i>
+								<p class="font-16 m-b-5">Professeurs</p>
+							</div>
+							<div class="ml-auto">
+								<h1 class="font-light text-right">169</h1>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="progress">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 100%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Column -->
+		<!-- Column -->
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="d-flex no-block align-items-center">
+							<div>
+								<i class="fas fa-users font-20 text-muted"></i>
+								<p class="font-16 m-b-5">Etudiants</p>
+							</div>
+							<div class="ml-auto">
+								<h1 class="font-light text-right">{{nbrEtudiants}}</h1>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="progress">
+							<div class="progress-bar bg-purple" role="progressbar" style="width: 100%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Column -->
+		<!-- Column -->
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="d-flex no-block align-items-center">
+							<div>
+								<i class="font-20 text-muted">
+									<span>
+										<h2>Ar</h2>
+									</span>
+								</i>
+								<p class="font-16 m-b-5"></p>
+							</div>
+							<div class="ml-auto">
+								<h1 class="font-light text-right"></h1>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="progress">
+							<div class="progress-bar bg-danger" role="progressbar" style="width: 100%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12 col-md-6">
+			<div class="card bg-info">
+				<div class="card-body text-white">
+					<div class="d-flex flex-row">
+						<div class="display-6 align-self-center"><i class="ti-wallet"></i></div>
+						<div class="p-10 align-self-center">
+							<h2 class="m-b-0" style="margin: 15px">Ar</h2>
+							<span>DROIT</span>
+						</div>
+						<div class="ml-auto align-self-center">
+							<h2 class="font-medium m-b-0">{{droitTotal | number_format(0, '', ' ')}}</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<div class="card bg-info">
+				<div class="card-body text-white">
+					<div class="d-flex flex-row">
+						<div class="display-6 align-self-center"><i class="ti-wallet"></i></div>
+						<div class="p-10 align-self-center">
+							<h2 class="m-b-0"  style="margin: 15px">Ar</h2>
+							<span>ECOLAGE</span>
+						</div>
+						<div class="ml-auto align-self-center">
+							<h2 class="font-medium m-b-0">{{ecolageTotal | number_format(0, '', ' ')}}</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% set mois = [] %}
+	{% for moi in dateMois %}
+		{% set mois = mois|merge([moi]) %}
+	{% endfor %}
+
+	<div class="row">
+		<div class="col-12 m-t-30">
+			<div class="card">
+				<div class="card-header" style="background-color: rgb(94, 91, 91); border-radius: 10px; color: white">
+					<center>
+						<h2>Visualisez vos recettes chaque année</h2>
+					</center>
+				</div>
+				<div class="card-body">
+					{{form_start(form)}}
+					<div class="row">
+						<div class="col-8">
+							{{form_row(form.an)}}</div>
+
+						<div class="col-4">
+							<button type="submit" class="btn btn-primary">
+								<i class="fas fa-search"></i>
+								Valider</button>
+						</div>
+					</div>
+					{{form_end(form)}}
+				</div>
+			</div>
+			<!-- Card -->
+		</div>
+	</div>
+
+	<br>
+	<h1 id="mois" style="display: none">{{mois|join(', ')}}</h1>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="card-body analytics-info">
+					<h3 class="card-title">Recette</h3>
+					<div id="basic-bar" style="height:400px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

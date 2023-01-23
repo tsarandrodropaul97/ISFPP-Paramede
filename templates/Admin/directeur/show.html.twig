@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Directeur{% endblock %}
+
+{% block body %}
+    <h1>Directeur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ directeur.id }}</td>
+            </tr>
+            <tr>
+                <th>MotDirecteur</th>
+                <td>{{ directeur.motDirecteur }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_directeur_index') }}">back to list</a>
+
+    <a href="{{ path('app_directeur_edit', {'id': directeur.id}) }}">edit</a>
+
+    {{ include('directeur/_delete_form.html.twig') }}
+{% endblock %}

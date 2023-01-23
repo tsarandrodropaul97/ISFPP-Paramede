@@ -1,0 +1,118 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Hello UserController!
+{% endblock %}
+
+{% block body %}
+<h1>{{ include("Admin/partials/titre.html.twig", {'titre':'Developpeurs de l\'application'} ) }}
+</h1><br><br>
+	<div class="row">
+		<div class="col-5">
+			<div class="card">
+				<div class="card-body">
+					<center class="m-t-30">
+						<img src="{{asset('../../assets/images/tsarandro.png')}}" class="rounded-circle" width="150"/>
+						<h4 class="card-title m-t-10">SILENY Tsarandro Paul</h4>
+						<h6 class="card-subtitle">Ingénieur en Informatique</h6>
+						<div class="row text-center justify-content-md-center">
+							<div class="col-2">
+								
+							</div>
+							<div class="col-8">
+								<a href="#" class="link">
+									<i class="fas fa-laptop"></i>
+									<font class="font-medium">+10 Projet réalisé</font>
+								</a>
+							</div>
+                            <div class="col-2">
+								
+							</div>
+						</div>
+					</center>
+				</div>
+				<div>
+					<hr>
+				</div>
+				<div class="card-body">
+					<small class="text-muted">Email
+					</small>
+					<h6>tsarandropaul97@gmail.com</h6>
+					<small class="text-muted p-t-30 db">Telephone</small>
+					<h6>+261 34 33 790 87</h6>
+					<small class="text-muted p-t-30 db">Entreprise</small>
+					<h6><a href="https://web.facebook.com/profile.php?id=100064290484056">DandoRoid Technology</a></h6>
+					<div>
+                    <a href="https://web.facebook.com/profile.php?id=100064290484056" target="_blank">
+                    	<img src="{{asset('../../assets/images/dandoroid.png')}}" width="100%" height="150" style="border:0">
+                    </a>
+					</div>
+					<small class="text-muted p-t-30 db">Social Profile</small>
+					<br/>
+                    <a href="https://web.facebook.com/profile.php?id=100009323744963" target="_blank">
+					<button class="btn btn-circle btn-secondary">
+						<i class="fab fa-facebook"></i>
+					</button>
+                
+                    </a>
+                    <a href="https://www.linkedin.com/in/tsarandro-paul-sileny-8a51b2198/" target="_blank">
+					<button class="btn btn-circle btn-secondary">
+						<i class="fab fa-linkedin"></i>
+					</button>
+                    </a>
+				</div>
+			</div>
+		</div>
+        <div class="col-2"></div>
+        <div class="col-5">
+			<div class="card">
+				<div class="card-body">
+					<center class="m-t-30">
+						<img src="{{asset('../../assets/images/bibita.png')}}" class="rounded-circle" width="150"/>
+						<h4 class="card-title m-t-10">RAJAOMANIRY Ismael</h4>
+						<h6 class="card-subtitle">Developpeur Web</h6>
+						<div class="row text-center justify-content-md-center">
+							<div class="col-2">
+								
+							</div>
+							<div class="col-8">
+								<a href="#" class="link">
+									<i class="fas fa-laptop"></i>
+									<font class="font-medium">+5 Projet réalisé</font>
+								</a>
+							</div>
+                            <div class="col-2">
+								
+							</div>
+						</div>
+					</center>
+				</div>
+				<div>
+					<hr>
+				</div>
+				<div class="card-body">
+					<small class="text-muted">Email
+					</small>
+					<h6>isamel@gmail.com</h6>
+					<small class="text-muted p-t-30 db">Telephone</small>
+					<h6>+261 34 33 790 87</h6>
+					<small class="text-muted p-t-30 db">Entreprise</small>
+					<h6><a href="https://web.facebook.com/profile.php?id=100064290484056">DandoRoid Technology</a></h6>
+					
+					<small class="text-muted p-t-30 db">Social Profile</small>
+					<br/>
+                    <a href="https://web.facebook.com/profile.php?id=100009323744963" target="_blank">
+					<button class="btn btn-circle btn-secondary">
+						<i class="fab fa-facebook"></i>
+					</button>
+                
+                    </a>
+                    <a href="https://www.linkedin.com/in/tsarandro-paul-sileny-8a51b2198/" target="_blank">
+					<button class="btn btn-circle btn-secondary">
+						<i class="fab fa-linkedin"></i>
+					</button>
+                    </a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

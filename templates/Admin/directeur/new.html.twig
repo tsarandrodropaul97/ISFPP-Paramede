@@ -1,0 +1,12 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}New Directeur
+{% endblock %}
+
+{% block body %}
+	<h1>Mots du Directeur</h1>
+
+	{{ include('Admin/directeur/_form.html.twig', {'button_label': 'Ajouter'}) }}
+
+	<a href="{{ path('app_directeur_index') }}">back to list</a>
+{% endblock %}

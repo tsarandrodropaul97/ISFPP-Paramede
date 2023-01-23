@@ -1,0 +1,53 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Liste des étudiants
+{% endblock %}
+
+{% block body %}
+{{ include("Admin/partials/titre.html.twig", {'titre':'Liste des étudiants'} ) }}
+
+<div class="row">
+	<div class="col-3"></div>
+	<div class="col-3"></div>
+	<div class="col-3"></div>
+	<div class="col-3"><button class="btn btn-success" onclick="imprimerListe('liste')">Imprimer la liste</button></div>
+</div>
+<div id="liste">
+	<h4>{{titreDuListe}}</h4>
+	<h4 class="card-tille"><b>Niveau : </b>{{ niveau.nom }}</h4>
+	<div class="card-body">
+		<div class="d-flex no-block align-items-center m-b-30"></div>
+		<div class="table-responsive">
+			<table id="zero_config" class="table product-overview table-bordered" width="100%">
+				{% if etudiants != null %}
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>N°</td>
+							<td>Nom et prénoms</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for etudiant in etudiants %}
+							<tr>
+								<td>{{ etudiant.matricule }}</td>
+								<td>{{ etudiant.nom }} {{ etudiant.prenom }}</td>
+							</tr>
+						{% endfor %}
+
+					</tbody>
+				{% endif %}
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+	function imprimerListe(element) {
+		var printContents = document.getElementById(element).innerHTML;
+		var originalContents = document.body.innerHTML;
+		document.body.innerHTML = printContents;
+		window.print();
+		document.body.innerHTML = originalContents;
+	  }
+</script>
+{% endblock %}

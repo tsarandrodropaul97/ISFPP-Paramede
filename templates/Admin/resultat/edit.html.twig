@@ -1,0 +1,51 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Modifier un resultat{% endblock %}
+
+{% block body %}
+
+{% form_theme form _self %}
+
+<h1>
+    {{ include("Admin/partials/titre.html.twig", {'titre':' Modifier un resultat'} ) }}
+</h1>
+<div class="card">
+    <div class="card-body">
+        <h3>{{niveau.nom}} - {{ semestre.nom }}</h3>
+        <hr>
+        {{ form_start(form)}}
+        <div class="row">
+            <div class="col-9">Etudiants</div>
+            <div class="col-3">
+                <div class="row">Note</div>
+                <div class="row">{{ form_row(form.uniteEnseignement) }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">{{ form_row(form.notes) }}</div>
+        </div><br>
+        <button class="btn btn-secondary" type="submit">
+            <i class="fas fa-plus"></i>
+            Enregistrer</button>
+        {{ form_end(form)}}
+    </div>
+    <a href="{{path('app_resultat_admin', {'idNiveau' : niveau.id})}}" class="btn btn-primary">Retour à la liste</a>
+</div>
+{% endblock %}
+
+{% block _resultat_notes_widget %}
+{{ form_widget(form) }}
+{% endblock %}
+ 
+{% block _resultat_notes_entry_row %}
+{{ form_widget(form) }}
+{% endblock %}
+
+{% block _resultat_notes_entry_widget %}
+<div class="form-group">
+    <div class="row">
+        <div class="col-9">{{ form_widget(form.etudiant) }}</div>
+        <div class="col-3">{{ form_widget(form.valeur) }}</div>
+    </div>
+</div>
+{% endblock %}

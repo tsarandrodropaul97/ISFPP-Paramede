@@ -1,0 +1,72 @@
+{% extends 'Admin/base.html.twig' %}
+
+{% block title %}Partenaires index
+{% endblock %}
+
+{% block body %}
+	<h1>
+		{{ include("Admin/partials/titre.html.twig", {'titre':'Actualité'} ) }}
+	</h1>
+	<br>
+	<div class="card">
+		<div class="card-body">
+			<div class="d-flex no-block align-items-center m-b-30"></div>
+			<div class="table-responsive">
+				<center>
+					<h4 class="card-tille" style="font-size:30px; font-weight: bold;">Liste des actualites</h4>
+				</center>
+				<table id="zero_config" class="table product-overview" width="100%">
+					<thead>
+						<tr style="color:black ;font-weight:bold; text-align:center">
+							<td>Titre de publication</td>
+							<td>Image</td>
+							<td>Date de publication</td>
+							<td>Statut</td>
+							<td>Fin de publication</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for actualite in actualites %}
+							<tr style="text-align: center">
+								<td>
+									{{ actualite.nom }}</td>
+								<td>
+									<img src="{{ vich_uploader_asset(actualite, 'imageFile') }}" class="rounded" alt="" style="width: 30px">
+								</td>
+								<td>
+									{{ actualite.datePublication | date('d F Y') }}
+								</td>
+								<td>
+									{% if actualite.statut == true %}
+										<span class="label label-success font-weight-50">En cours</span>
+									{% else %}
+										<span class="label label-danger font-weight-50">Expiré</span>
+									{% endif %}
+								</td>
+								<td>
+									{{ actualite.dateFinPublication | date('d F Y') }}
+								</td>
+								<td>
+									<a href="{{ path('app_actualite_edit_admin', {'id': actualite.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+										Modifier</a>
+									<form action="{{ path('app_actualites_delete_admin', {id: actualite.id}) }}" method="POST" style="display: inline-block">
+										<input type="hidden" name="_method" value="DELETE">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ actualite.id) }}">
+										<button class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</button>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+					<a href="{{ path('app_actualite_creer_admin') }}" class="btn btn-secondary" style="float: right">
+						<i class="fas fa-plus"></i>
+						Gerer la publication</a>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
